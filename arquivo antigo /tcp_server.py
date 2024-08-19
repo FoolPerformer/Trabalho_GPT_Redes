@@ -15,7 +15,7 @@ def on_new_client(clientsocket,addr):
     if not nome_cod:
         nome_cliente = "Nome nao informado"
     nome_cliente = nome_cod.decode('utf-8')
-    arquivo = open(r"C:\Users\paulo\Documents\Trabalho Redes 1\datateste.txt","w+")
+    arquivo = open(r"C:\Users\paulo\Documents\Trabalho Redes 1\datateste.txt","a+")
     arquivo.write("Nome: " + nome_cliente + "\n")
     contador = 0
     resultadoTotal = 0
@@ -31,9 +31,9 @@ def on_new_client(clientsocket,addr):
             texto_recebido = data.decode('utf-8') # converte os bytes em string
             if (texto_recebido == 'tchau'):
                 print('vai encerrar o socket do cliente {} !'.format(addr[0]))
-                print("\nVoce acertou :" + str(resultadoTotal) + " / " + str(contador))
+                arquivo.write("O usuario "+ nome_cliente + " acertou :" + str(resultadoTotal) + " / " + str(contador))
                 porcentagem = round(float(resultadoTotal / contador * 100), 2)
-                print("\nPorcentagem de acertos: " + str(porcentagem) + "% ")
+                arquivo.write("\nPorcentagem de acertos: " + str(porcentagem) + "% ")
                 arquivo.close()
                 clientsocket.close() 
                 return
