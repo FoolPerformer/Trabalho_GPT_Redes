@@ -16,7 +16,7 @@ def on_new_client(clientsocket,addr):
         nome_cliente = "Nome nao informado"
     nome_cliente = nome_cod.decode('utf-8')
     arquivo = open(r"C:\Users\paulo\Documents\Trabalho Redes 1\datateste.txt","a+")
-    arquivo.write("Nome: " + nome_cliente + "\n")
+    arquivo.write("\nNome: " + nome_cliente )
     contador = 0
     resultadoTotal = 0
     porcentagem = 0
@@ -31,13 +31,13 @@ def on_new_client(clientsocket,addr):
             texto_recebido = data.decode('utf-8') # converte os bytes em string
             if (texto_recebido == 'tchau'):
                 print('vai encerrar o socket do cliente {} !'.format(addr[0]))
-                arquivo.write("O usuario "+ nome_cliente + " acertou :" + str(resultadoTotal) + " / " + str(contador))
+                arquivo.write("\nO usuario "+ nome_cliente + " acertou :" + str(resultadoTotal) + " / " + str(contador))
                 porcentagem = round(float(resultadoTotal / contador * 100), 2)
                 arquivo.write("\nPorcentagem de acertos: " + str(porcentagem) + "% ")
                 arquivo.close()
                 clientsocket.close() 
                 return
-            arquivo.write(texto_recebido + " ")
+            arquivo.write("\n" + texto_recebido + " ")
             texto_recebido = "Escreva em, no máximo, uma frase " + texto_recebido + " sem a utilizacao de acentos nas palavras"
             print('recebido do cliente {} na porta {}: {}'.format(addr[0], addr[1],texto_recebido))
 
@@ -97,7 +97,7 @@ def on_new_client(clientsocket,addr):
             clientsocket.send(resultado.encode())
             contador += 1
             resultadoTotal += int(resultado)
-            arquivo.write(resposta + "\n")
+            arquivo.write(resposta)
             
             
         except Exception as error:
