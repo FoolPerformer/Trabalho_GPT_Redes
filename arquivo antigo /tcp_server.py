@@ -3,19 +3,42 @@ from threading import Thread
 from random import randint
 import requests
 import time
+import os
 
 HOST = '127.0.0.1'  # endereço IP
 PORT = 20000        # Porta utilizada pelo servidor
 BUFFER_SIZE = 1024  # tamanho do buffer para recepção dos dados
 
 def on_new_client(clientsocket,addr):
+    
+    nome_cod = clientsocket.recv(BUFFER_SIZE)
+    if not nome_cod:
+        nome_cliente = "Nome nao informado"
+    nome_cliente = nome_cod.decode('utf-8')
+    arquivo = open(r"C:\Users\paulo\Documents\Trabalho Redes 1\datateste.txt","w+")
+    arquivo.write("Nome: " + nome_cliente + "\n")
+    contador = 0
+    resultadoTotal = 0
+    porcentagem = 0
+    
+    
     while True:
         try:
+            
             data = clientsocket.recv(BUFFER_SIZE)
             if not data:
                 break
             texto_recebido = data.decode('utf-8') # converte os bytes em string
-            texto_recebido = "Escreva em, no máximo, uma frase " + texto_recebido + "sem a utilizacao de acentos nas palavras"
+            if (texto_recebido == 'tchau'):
+                print('vai encerrar o socket do cliente {} !'.format(addr[0]))
+                print("\nVoce acertou :" + str(resultadoTotal) + " / " + str(contador))
+                porcentagem = round(float(resultadoTotal / contador * 100), 2)
+                print("\nPorcentagem de acertos: " + str(porcentagem) + "% ")
+                arquivo.close()
+                clientsocket.close() 
+                return
+            arquivo.write(texto_recebido + " ")
+            texto_recebido = "Escreva em, no máximo, uma frase " + texto_recebido + " sem a utilizacao de acentos nas palavras"
             print('recebido do cliente {} na porta {}: {}'.format(addr[0], addr[1],texto_recebido))
 
             num = randint(0,9)
@@ -52,15 +75,34 @@ def on_new_client(clientsocket,addr):
 
             else: #pessoa
 
-                resposta = "impar"
+                resposta = input("Escreva a resposta: ")
+                numChute = 2
 
             clientsocket.send(resposta.encode())
-            if (texto_recebido == 'tchau'):
-                print('vai encerrar o socket do cliente {} !'.format(addr[0]))
-                clientsocket.close() 
-                return 
+            
+            data2 = clientsocket.recv(BUFFER_SIZE)
+            
+            if not data2:
+                break
+            num_recebido = data2.decode('utf-8') # converte os bytes em string
+            num_recebido = int(num_recebido)
+            
+            if num_recebido == numChute:
+                resultado = 1
+            else:
+                resultado = 0
+            
+            resultado = str(resultado)
+            
+            clientsocket.send(resultado.encode())
+            contador += 1
+            resultadoTotal += int(resultado)
+            arquivo.write(resposta + "\n")
+            
+            
         except Exception as error:
             print("Erro na conexão com o cliente!!")
+            arquivo.close()
             return
 
 
