@@ -22,8 +22,8 @@ def on_new_client(clientsocket,addr):
     if not nome_cod:
         nome_cliente = "Nome nao informado"
     nome_cliente = nome_cod.decode('utf-8')
-    arquivo = open(r"D:\UFOP\Redes I\Trabalho_programação\datateste.txt","a+")
-    ranking = open(r"D:\UFOP\Redes I\Trabalho_programação\ranking.txt","a+")
+    arquivo = open(r"C:\Users\paulo\Documents\Trabalho Redes 1\datateste.txt","a+")
+    ranking = open(r"C:\Users\paulo\Documents\Trabalho Redes 1\ranking.txt","a+")
     arquivo.write("\nNome: " + nome_cliente )
     contador = 0
     resultadoTotal = 0
@@ -41,29 +41,28 @@ def on_new_client(clientsocket,addr):
                 print('vai encerrar o socket do cliente {} !'.format(addr[0]))
                 arquivo.write("\nO usuario "+ nome_cliente + " acertou :" + str(resultadoTotal) + " / " + str(contador))
                 porcentagem = round(float(resultadoTotal / contador * 100), 2)
-                arquivo.write("\nPorcentagem de acertos: " + str(porcentagem) + "% ")
                 arquivo.close()
                 clientsocket.close()
                 if contador >= 5:
                     ranking.write(nome_cliente + ": " + str(porcentagem)+"%\n")
                     ranking.close()
-                    ranking = open(r"D:\UFOP\Redes I\Trabalho_programação\ranking.txt","r+")
+                    ranking = open(r"C:\Users\paulo\Documents\Trabalho Redes 1\ranking.txt","r+")
                     ordenado = ranking.readlines()
                     ordenado.sort(key=my_sort, reverse=True)
                     ranking.close()
-                    ranking = open(r"D:\UFOP\Redes I\Trabalho_programação\ranking.txt","w+")
+                    ranking = open(r"C:\Users\paulo\Documents\Trabalho Redes 1\ranking.txt","w+")
                     for line in ordenado:
                         ranking.write(line)
                     ranking.close()
 
                 return
-            arquivo.write("\n" + texto_recebido + " ")
-            texto_recebido = "Escreva em, no máximo, uma frase " + texto_recebido + " sem a utilizacao de acentos nas palavras"
+            arquivo.write("\nPergunta: " + texto_recebido + " \ Resposta: ")
+            texto_recebido = "Escreva em, no máximo, uma frase " + texto_recebido
             print('recebido do cliente {} na porta {}: {}'.format(addr[0], addr[1],texto_recebido))
 
-            num = randint(0,9)
+            escolha = input("Quem vai responder? \n1 para chatGPT \n2 para Humano\n")
 
-            if num % 2 == 0: #gpt
+            if int(escolha) == 1 : #gpt
 
                 url = "https://chatgpt-42.p.rapidapi.com/conversationgpt4-2"
 
@@ -85,13 +84,10 @@ def on_new_client(clientsocket,addr):
 
                 response = requests.post(url, json=payload, headers=headers)
                 response = str(response.json())
-                print(response)
                 semi_resposta = response.split(": '")
                 resposta = semi_resposta[1].split("', '")
                 resposta = resposta[0]
-                print(resposta)
-            
-               
+                numChute = 1
 
             else: #pessoa
 
@@ -117,7 +113,14 @@ def on_new_client(clientsocket,addr):
             clientsocket.send(resultado.encode())
             contador += 1
             resultadoTotal += int(resultado)
-            arquivo.write(resposta)
+            
+            if resultado == 1:
+                resposta = resposta + " \ acertou o chute"
+                arquivo.write(resposta)
+                
+            else:
+                resposta = resposta + " \ errou o chute"
+                arquivo.write(resposta)
             
             
         except Exception as error:
