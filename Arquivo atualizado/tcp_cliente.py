@@ -18,7 +18,7 @@ def main(argv):
             s.send(nome.encode())
             while(True):       
                 
-                texto = input("Digite o texto a ser enviado ao servidor:\n")
+                texto = input("Digite sua duvida (caso queira finalizar a conexao escreva tchau):\n")
                 s.send(texto.encode()) #texto.encode - converte a string para bytes
                 data = s.recv(BUFFER_SIZE)
                 #texto_recebido = repr(data) #converte de bytes para um formato "printável"
