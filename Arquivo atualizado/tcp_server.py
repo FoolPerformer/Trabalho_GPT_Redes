@@ -1,4 +1,3 @@
-
 import socket, sys
 from threading import Thread
 from random import randint
@@ -22,12 +21,13 @@ def on_new_client(clientsocket,addr):
     if not nome_cod:
         nome_cliente = "Nome nao informado"
     nome_cliente = nome_cod.decode('utf-8')
-    arquivo = open(r"C:\Users\paulo\Documents\Trabalho Redes 1\datateste.txt","a+")
-    ranking = open(r"C:\Users\paulo\Documents\Trabalho Redes 1\ranking.txt","a+")
+    arquivo = open(r"D:\UFOP\Redes I\Trabalho_programação\datateste.txt","a+")
+    ranking = open(r"D:\UFOP\Redes I\Trabalho_programação\ranking.txt","a+")
     arquivo.write("\nNome: " + nome_cliente )
     contador = 0
     resultadoTotal = 0
     porcentagem = 0
+    cont = 0
     
     
     while True:
@@ -42,19 +42,24 @@ def on_new_client(clientsocket,addr):
                 arquivo.write("\nO usuario "+ nome_cliente + " acertou :" + str(resultadoTotal) + " / " + str(contador))
                 porcentagem = round(float(resultadoTotal / contador * 100), 2)
                 arquivo.close()
-                clientsocket.close()
                 if contador >= 5:
                     ranking.write(nome_cliente + ": " + str(porcentagem)+"%\n")
                     ranking.close()
-                    ranking = open(r"C:\Users\paulo\Documents\Trabalho Redes 1\ranking.txt","r+")
+                    ranking = open(r"D:\UFOP\Redes I\Trabalho_programação\ranking.txt","r+")
                     ordenado = ranking.readlines()
                     ordenado.sort(key=my_sort, reverse=True)
                     ranking.close()
-                    ranking = open(r"C:\Users\paulo\Documents\Trabalho Redes 1\ranking.txt","w+")
+                    for i in ordenado:
+                        cont = cont + 1
+                        if nome_cliente == i.split(':')[0]:
+                            break
+                    ranking = open(r"D:\UFOP\Redes I\Trabalho_programação\ranking.txt","w+")
                     for line in ordenado:
                         ranking.write(line)
                     ranking.close()
 
+                clientsocket.send(str(cont).encode())
+                clientsocket.close()
                 return
             arquivo.write("\nPergunta: " + texto_recebido + " \ Resposta: ")
             texto_recebido = "Escreva em, no máximo, uma frase " + texto_recebido
@@ -108,11 +113,10 @@ def on_new_client(clientsocket,addr):
             else:
                 resultado = 0
             
-            resultado = str(resultado)
-            
-            clientsocket.send(resultado.encode())
-            contador += 1
-            resultadoTotal += int(resultado)
+            # resultado = str(resultado)
+            # clientsocket.send(resultado.encode())
+            # contador += 1
+            # resultadoTotal += int(resultado)
             
             if resultado == 1:
                 resposta = resposta + " \ acertou o chute"
@@ -122,6 +126,10 @@ def on_new_client(clientsocket,addr):
                 resposta = resposta + " \ errou o chute"
                 arquivo.write(resposta)
             
+            resultado = str(resultado)
+            clientsocket.send(resultado.encode())
+            contador += 1
+            resultadoTotal += int(resultado)
             
         except Exception as error:
             print("Erro na conexão com o cliente!!")
