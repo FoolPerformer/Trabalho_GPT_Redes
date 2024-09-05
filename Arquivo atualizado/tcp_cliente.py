@@ -1,3 +1,4 @@
+
 import socket, sys, os
 
 
@@ -30,6 +31,7 @@ def main(argv):
                     print("\nVoce acertou :" + str(somaResultado) + " / " + str(total))
                     porcentagem = round(float(somaResultado / total * 100), 2)
                     print("\nPorcentagem de acertos: " + str(porcentagem) + "% ")
+                    print("\nSua posicao no ranking e: "+texto_string)
                     os.system("pause")
                     s.close()
                     break
