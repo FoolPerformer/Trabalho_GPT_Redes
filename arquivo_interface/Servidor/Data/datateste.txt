@@ -1,0 +1,16 @@
+Nome: Samira
+Pergunta: Como esta o dia hoje?
+Resposta: Esta calor
+
+Nome: Samira
+Pergunta: Estamos conectados?
+Resposta: Sim !!
+
+
+Nome: Samira
+Pergunta: Estamos conectados? | Resposta: Erro ao obter resposta da API. | errou o chute
+Pergunta: outra duvida agora, que dia e hoje? | Resposta: o dia que deu tudo errado | acertou o chute
+Nome: Samira
+Pergunta: Que dia é hoje? | Resposta: Erro ao obter resposta da API. | acertou o chute
+Nome: Juliana
+Pergunta: Vamos a praia? | Resposta: Claro, mas estamos sem dinheiro agr, podemos nos planejar. | acertou o chute
