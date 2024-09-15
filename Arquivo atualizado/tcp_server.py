@@ -82,7 +82,7 @@ def on_new_client(clientsocket,addr):
 	                "max_tokens": 90,
                 }
                 headers = {
-	                #"x-rapidapi-key": "NEM FUDENDO QUE VCS VAO USAR MINHA CHAVE RYAN QUER ME FALIR SOCORRO",
+	                "x-rapidapi-key": "0012d9e3d4msh2ba9ccbbcc6639dp166e6bjsn5e1ba0a08a21",
 	                "x-rapidapi-host": "chatgpt-42.p.rapidapi.com",
 	                "Content-Type": "application/json"
                 }
